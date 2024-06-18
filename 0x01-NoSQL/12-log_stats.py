@@ -12,7 +12,7 @@ if __name__ == "__main__":
 
     methods = ["GET", "POST", "PUT", "PATCH", "DELETE"]
 
-    print("{} logs".format(collection_nginx.count_documents({})))
+    print("{} logs".format(collection_nginx.estimated_document_count()))
     print("Methods:")
 
     for method in methods:
