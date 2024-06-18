@@ -1,0 +1,3 @@
+// show all databases in monogdb
+show dbs
+
