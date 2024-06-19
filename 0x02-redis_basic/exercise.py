@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
-""" Writing strings to Redis"""
 
+"""redis module"""
 import redis
+from typing import Union, Optional, Any, Callable
 import uuid
-from typing import Union, Callable, Optional, Any
-from functool import wraps
+from functools import wraps
 
 
 def count_calls(method: Callable) -> Callable:
@@ -42,38 +42,37 @@ def replay(method: Callable) -> Callable:
         print(f"{method_name}(*{i.decode('utf-8')}) -> {o.decode('utf-8')}")
 
 
-class Cache(object):
-    """
-        Cache class
-    """
-    def __init__(self):
-        """initialize"""
+class Cache:
+    """Cache class"""
+
+    def __init__(self) -> None:
+        """class init method"""
         self._redis = redis.Redis()
         self._redis.flushdb()
 
     @call_history
     @count_calls
     def store(self, data: Union[str, bytes, int, float]) -> str:
-        """
-            generate random key
-        """
+        """store method"""
         key = str(uuid.uuid4())
         self._redis.set(key, data)
         return key
 
     @staticmethod
-    def get(self, key: str, fn: Optional[Callable] = None) -> Any:
-        """Function that return a value"""
-        value = self._redis.get(key)
-        if value is not None and fn is not None:
-            return fn(value)
-        return value
+    def get_int(value: bytes) -> int:
+        """convert bytes to int"""
+        return int(value)
 
     @staticmethod
-    def get_str(self, value: bytes) -> str:
-        """to get string"""
+    def get_str(value: bytes) -> str:
+        """convert bytes to str"""
         return str(value)
 
-    def get_int(self, value: bytes) -> int:
-        """to get integer"""
-        return int(value)
+    def get(self, key: str, fn: Optional[Any] = None) -> Any:
+        """get method"""
+        value = self._redis.get(key)
+        if value is None:
+            return None
+        if fn:
+            return fn(value)
+        return value
