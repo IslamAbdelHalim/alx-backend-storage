@@ -23,7 +23,7 @@ class Cache(object):
         self._redis.set(key, data)
         return key
 
-    def get(self, key: str, fn: Optional[Callable[Any]] = None) -> Any:
+    def get(self, key: str, fn: Optional[Callable] = None) -> Any:
         """Function that return a value"""
         value = self._redis.get(key)
         if value is not None and fn is not None:
